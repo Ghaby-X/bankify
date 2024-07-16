@@ -72,7 +72,7 @@ declare type Transaction = {
   amount: number;
   pending: boolean;
   category: string;
-  date: string;
+  date: strfing;
   image: string;
   type: string;
   $createdAt: string;
@@ -202,7 +202,7 @@ declare interface BankTabItemProps {
   appwriteItemId?: string;
 }
 
-declare interface TotlaBalanceBoxProps {
+declare interface TotalBalanceBoxProps {
   accounts: Account[];
   totalBanks: number;
   totalCurrentBalance: number;
