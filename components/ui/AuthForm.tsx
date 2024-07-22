@@ -12,6 +12,7 @@ import CustomInput from "./CustomInput";
 import { Loader2, Router } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/lib/actions/user.actions";
+import PlaidLink from "../PlaidLink";
 
 const AuthForm = ({ type }: { type: string }) => {
   const [user, setUser] = useState(null);
@@ -32,9 +33,20 @@ const AuthForm = ({ type }: { type: string }) => {
     setIsLoading(true);
     try {
       // sign up with Appwrite & create plaid token
-
       if (type === "sign-up") {
-        const newUser = await signUp(data);
+        const userData = {
+          firstName: data.firstName!,
+          lastName: data.lastName!,
+          address1: data.address1!,
+          city: data.city!,
+          state: data.state!,
+          postalCode: data.postalCode!,
+          dateOfBirth: data.dateOfBirth!,
+          ssn: data.ssn!,
+          email: data.email,
+          password: data.password,
+        };
+        const newUser = await signUp(userData);
         setUser(newUser);
       }
 
@@ -46,7 +58,7 @@ const AuthForm = ({ type }: { type: string }) => {
         if (response) router.push("/");
       }
     } catch (error) {
-      console.log(error);
+      console.log("error signing user up", error);
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +92,9 @@ const AuthForm = ({ type }: { type: string }) => {
       </header>
 
       {user ? (
-        <div className="flext flex-col gap-4">{/* PlaidLink */}</div>
+        <div className="flext flex-col gap-4">
+          <PlaidLink user={user} variant="primary" />
+        </div>
       ) : (
         <>
           <Form {...form}>
@@ -130,7 +144,7 @@ const AuthForm = ({ type }: { type: string }) => {
                   <div className="flex gap-4">
                     <CustomInput
                       control={form.control}
-                      name="dob"
+                      name="dateOfBirth"
                       label="Date of Birth"
                       placeholder="YYYY-MM-DD"
                     />
